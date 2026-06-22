@@ -57,36 +57,135 @@ def execute_action(query, data=()):
 # --- NEW: PDF COMPILER SUBSYSTEM ENGINE ---
 def generate_pdf_report():
     buffer = io.BytesIO()
-    doc = SimpleDocTemplate(buffer, pagesize=letter, rightMargin=40, leftMargin=40, topMargin=40, bottomMargin=40)
+    # Explicit page setup with professional 0.5-inch margins for dense scannability
+    doc = SimpleDocTemplate(
+        buffer, 
+        pagesize=letter, 
+        rightMargin=36, 
+        leftMargin=36, 
+        topMargin=36, 
+        bottomMargin=36
+    )
     story = []
     
+    # Base stylesheet retrieval
     styles = getSampleStyleSheet()
-    title_style = ParagraphStyle('DocTitle', parent=styles['Heading1'], fontSize=18, leading=22, textColor=colors.HexColor('#1b4d3e'), spaceAfter=15)
-    h2_style = ParagraphStyle('SectionHeader', parent=styles['Heading2'], fontSize=13, leading=16, textColor=colors.HexColor('#2c3e50'), spaceBefore=12, spaceAfter=8)
-    body_style = ParagraphStyle('ReportBody', parent=styles['Normal'], fontSize=10, leading=14, textColor=colors.HexColor('#333333'), spaceAfter=6)
-    bullet_style = ParagraphStyle('BulletBody', parent=body_style, leftIndent=15, bulletIndent=5, spaceAfter=4)
     
-    story.append(Paragraph("TECHNICAL PROJECT REPORT: LOCAL FOOD WASTAGE MANAGEMENT SYSTEM", title_style))
-    story.append(Paragraph(f"<b>Course Module:</b> Database Management Systems & BI Applications<br/>"
-                           f"<b>Developer:</b> Johane Muzinda<br/>"
-                           f"<b>Development Stack:</b> Python, Streamlit, MySQL, Plotly Express<br/>"
-                           f"<b>Report Sync Generation:</b> {datetime.now().strftime('%B %d, %Y')}", body_style))
-    story.append(Spacer(1, 15))
+    # Custom Palette Definitions
+    PRIMARY_COLOR = colors.HexColor('#1b4d3e')   # Deep Forest Green
+    SECONDARY_COLOR = colors.HexColor('#2c3e50') # Slate Blue
+    TEXT_DARK = colors.HexColor('#222222')       # Charcoal Off-Black
+    BG_LIGHT = colors.HexColor('#f8f9fa')        # Soft Grey Background
     
+    # Tailored Typography Styles
+    title_style = ParagraphStyle(
+        'DocTitle', parent=styles['Heading1'], fontSize=20, leading=24, 
+        textColor=PRIMARY_COLOR, spaceAfter=4, fontName="Helvetica-Bold"
+    )
+    subtitle_style = ParagraphStyle(
+        'DocSub', parent=styles['Normal'], fontSize=10, leading=14, 
+        textColor=colors.HexColor('#555555'), spaceAfter=15, fontName="Helvetica"
+    )
+    h2_style = ParagraphStyle(
+        'SectionHeader', parent=styles['Heading2'], fontSize=12, leading=16, 
+        textColor=SECONDARY_COLOR, spaceBefore=14, spaceAfter=6, 
+        fontName="Helvetica-Bold", keepWithNext=True
+    )
+    body_style = ParagraphStyle(
+        'ReportBody', parent=styles['Normal'], fontSize=9.5, leading=14, 
+        textColor=TEXT_DARK, spaceAfter=6, fontName="Helvetica"
+    )
+    bullet_style = ParagraphStyle(
+        'BulletBody', parent=body_style, leftIndent=12, bulletIndent=4, spaceAfter=4
+    )
+    table_text = ParagraphStyle(
+        'TableText', parent=styles['Normal'], fontSize=9, leading=12, 
+        textColor=TEXT_DARK, fontName="Helvetica"
+    )
+    table_header = ParagraphStyle(
+        'TableHeader', parent=styles['Normal'], fontSize=9, leading=12, 
+        textColor=colors.white, fontName="Helvetica-Bold"
+    )
+
+    # 1. Document Header / Title Block
+    story.append(Paragraph("STRATEGIC PROJECT REPORT: LOCAL FOOD WASTAGE MANAGEMENT SYSTEM", title_style))
+    story.append(Paragraph(
+        f"<b>Academic Framework:</b> Database Management Systems & BI Applications<br/>"
+        f"<b>Lead Software Engineer:</b> Johane Muzinda<br/>"
+        f"<b>Core Architecture Stack:</b> Python 3, Streamlit Engine, MySQL Relational DB, Plotly Analytics<br/>"
+        f"<b>System Generation Sync Date:</b> {datetime.now().strftime('%B %d, %Y')}", 
+        subtitle_style
+    ))
+    
+    # Decorative Top Accent Bar
+    accent_bar = Table([[""]], colWidths=[540], rowHeights=[3])
+    accent_bar.setStyle(TableStyle([
+        ('BACKGROUND', (0,0), (-1,-1), PRIMARY_COLOR),
+        ('BOTTOMPADDING', (0,0), (-1,-1), 0),
+        ('TOPPADDING', (0,0), (-1,-1), 0),
+    ]))
+    story.append(accent_bar)
+    story.append(Spacer(1, 10))
+    
+    # 2. Section 1: Executive Summary
     story.append(Paragraph("SECTION 1: EXECUTIVE SUMMARY", h2_style))
-    story.append(Paragraph("Significant volumes of edible surplus food from commercial entities are discarded daily due to a lack of structured communication channels with humanitarian networks. This project addresses the challenge by establishing a real-time, data-driven relational platform that matches supply surplus with localized demand.", body_style))
+    story.append(Paragraph(
+        "Significant volumes of perfectly edible surplus food from commercial providers are discarded daily due to a lack of agile, data-driven supply channels. "
+        "This project introduces a highly relational database architecture coupled with an analytical management interface. "
+        "By optimizing multi-table interactions across providers, food listings, and receiver institutions (NGOs), the application transforms fragmented community efforts into a structured, trackable, and transparent food rescue operation.", 
+        body_style
+    ))
     
-    story.append(Paragraph("SECTION 2: CORE SYSTEM OBJECTIVES", h2_style))
-    story.append(Paragraph("• Provide food providers with an instant interface to log perishable surplus.", bullet_style))
-    story.append(Paragraph("• Grant non-governmental organizations (NGOs) rapid transparency over localized inventory.", bullet_style))
-    story.append(Paragraph("• Supply system administrators with programmatic tracking via advanced SQL analytics.", bullet_style))
+    # 3. Section 2: Structured Architecture Matrix (Table Layout)
+    story.append(Paragraph("SECTION 2: RELATIONAL DATABASE INFRASTRUCTURE", h2_style))
+    story.append(Paragraph("The backend schema utilizes specialized indexing across several multi-table entities to manage transactional lifecycles:", body_style))
     
-    story.append(Paragraph("SECTION 3: STRATEGIC RECOMMENDATIONS", h2_style))
-    story.append(Paragraph("• <b>Automated Webhook Notifications:</b> Integrate a microservice alert mechanism to notify nearby NGOs the instant high-volume surplus metrics are added into the schema.", bullet_style))
-    story.append(Paragraph("• <b>Geospatial Routing Matrices:</b> Upgrade location mapping fields to calculate real-time transit distances dynamically using coordinates.", bullet_style))
-    story.append(Paragraph("• <b>Chronological Event Schedulers:</b> Deploy a native MySQL event loop database query to automatically archive expired entries from active views.", bullet_style))
+    table_data = [
+        [Paragraph("Relational Entity Matrix", table_header), Paragraph("Functional Responsibility & Scope", table_header)],
+        [Paragraph("<b>providers</b> Table", table_text), Paragraph("Logs institutional profiles (Restaurants, Hotels, Supermarkets) alongside geographic tracking metadata.", table_text)],
+        [Paragraph("<b>food_listings</b> Table", table_text), Paragraph("Tracks perishable dynamic inventory data, quantities, item categories, meal designations, and strict expiry limits.", table_text)],
+        [Paragraph("<b>receivers</b> Table", table_text), Paragraph("Maintains authorized humanitarian network identities, distribution capacity limits, and site location codes.", table_text)],
+        [Paragraph("<b>claims</b> Table", table_text), Paragraph("Handles the matching operations engine, auditing real-time requests, timestamps, and order tracking statuses.", table_text)]
+    ]
     
-    doc.build(story)
+    infra_table = Table(table_data, colWidths=[150, 390])
+    infra_table.setStyle(TableStyle([
+        ('BACKGROUND', (0,0), (-1,0), SECONDARY_COLOR),
+        ('ALIGN', (0,0), (-1,-1), 'LEFT'),
+        ('VALIGN', (0,0), (-1,-1), 'TOP'),
+        ('ROWBACKGROUNDS', (0,1), (-1,-1), [colors.white, BG_LIGHT]),
+        ('BOX', (0,0), (-1,-1), 0.5, colors.HexColor('#dddddd')),
+        ('INNERGRID', (0,0), (-1,-1), 0.5, colors.HexColor('#eeeeee')),
+        ('TOPPADDING', (0,0), (-1,-1), 6),
+        ('BOTTOMPADDING', (0,0), (-1,-1), 6),
+    ]))
+    story.append(infra_table)
+    story.append(Spacer(1, 8))
+    
+    # 4. Section 3: Engineering Roadmap
+    story.append(Paragraph("SECTION 3: SYSTEM DESIGN & DEPLOYMENT CONSIDERATIONS", h2_style))
+    story.append(Paragraph("To ensure operational data integrity and mitigate data loss during concurrent transactions, the system adheres to strict architectural boundaries:", body_style))
+    story.append(Paragraph("• <b>ACID Compliance:</b> Leverages native MySQL relational foreign key constraints with <code>ON DELETE CASCADE</code> rules to enforce database consistency.", bullet_style))
+    story.append(Paragraph("• <b>Fail-Safe presentation Layer:</b> The data pipeline contains a built-in automated fallback mechanism that ensures continuous dashboard performance even during cloud infrastructure transitions.", bullet_style))
+    story.append(Paragraph("• <b>Time-Sensitive Filtering:</b> Employs SQL timestamp differentials to highlight inventory batches close to expiration, preventing waste before it happens.", bullet_style))
+    
+    # 5. Section 4: Strategic Recommendations
+    story.append(Paragraph("SECTION 4: STRATEGIC FUTURE ROADMAP", h2_style))
+    story.append(Paragraph("• <b>Automated Webhook Notifications:</b> Implement instant messaging or SMS protocols via an alert manager microservice to notify nearby NGOs immediately when a high-volume food listing is published.", bullet_style))
+    story.append(Paragraph("• <b>Geospatial Routing Matrices:</b> Integrate geographic mapping APIs to calculate optimal delivery routes between donor storefronts and target non-profit distribution points dynamically.", bullet_style))
+    story.append(Paragraph("• <b>Chronological Event Schedulers:</b> Deploy internal database triggers to automatically archive or clean up expired entries from the active dashboard view without requiring manual administrative cleanup.", bullet_style))
+
+    # Canvas Callback function for adding dynamic Page Number Footers
+    def add_footer(canvas, doc):
+        canvas.saveState()
+        canvas.setFont('Helvetica', 8)
+        canvas.setFillColor(colors.HexColor('#777777'))
+        page_num = f"Page {doc.page}"
+        canvas.drawRightString(576, 20, page_num)
+        canvas.drawString(36, 20, "Technical Engineering Output Document — Confidential")
+        canvas.restoreState()
+
+    doc.build(story, onFirstPage=add_footer, onLaterPages=add_footer)
     buffer.seek(0)
     return buffer.getvalue()
 
