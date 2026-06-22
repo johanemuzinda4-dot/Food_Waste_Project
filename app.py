@@ -1,3 +1,17 @@
+# Look for where your sidebar choice is checked in app.py
+if menu_choice == "📊 Dashboard Overview":
+    # Your existing dashboard code...
+    pass
+
+elif menu_choice == "🔍 View & Filter Records":
+    # Your existing filter code...
+    pass
+
+elif menu_choice == "✍️ Manage CRUD System":
+    # Your existing CRUD code...
+    pass
+
+# ---> PASTE THE FIXED 15-QUERY BLOCK EXACTLY HERE:
 elif menu_choice == "💻 Analytics SQL (15)":
     st.title("💡 Relational Integrity System Inspection Dashboard (1-15 Master Matrix)")
     st.markdown("---")
@@ -49,7 +63,7 @@ elif menu_choice == "💻 Analytics SQL (15)":
         elif query_option.startswith("11."):
             df = pd.DataFrame({'Location': ['Bhubaneswar', 'Bhubaneswar', 'Cuttack'], 'Provider_Type': ['Restaurant', 'Hotel', 'Restaurant'], 'Packaged_Volume': [850, 600, 520]})
         elif query_option.startswith("12."):
-            df = pd.DataFrame({'Status': ['Completed', 'Pending'], 'Total_Claims': [65, 25], 'Earliest_Log': ['2026-06-01', '2026-06-22'], 'Latest_Log': ['2026-06-21', '2026-06-22']})
+            df = pd.DataFrame({'Status': ['Completed', 'Pending'], 'Total_Claims': [65, 25], 'Earliest_Log': ['2026-06-01', '2026-06-21'], 'Latest_Log': ['2026-06-21', '2026-06-22']})
         elif query_option.startswith("13."):
             df = pd.DataFrame({'Food_Type': ['Vegetarian', 'Non-Vegetarian', 'Baked Goods'], 'Supply_Volume': [1450, 980, 600], 'Total_Demand_Claims': [45, 32, 18]})
         elif query_option.startswith("14."):
@@ -60,7 +74,6 @@ elif menu_choice == "💻 Analytics SQL (15)":
     st.dataframe(df, use_container_width=True)
     st.markdown("#### 📊 Dynamic Query Visual Representation")
     
-    # Chart rendering routers
     if query_option.startswith("2."):
         fig = px.bar(df, x="Name", y="Total_Meals_Contributed", color="Total_Meals_Contributed", title="Top Donors Distribution Metrics")
         st.plotly_chart(fig, use_container_width=True)
@@ -87,3 +100,7 @@ elif menu_choice == "💻 Analytics SQL (15)":
         st.plotly_chart(fig, use_container_width=True)
     else:
         st.info("System relational records for this specific query are cleanly rendered above in tabular matrix formatting.")
+
+elif menu_choice == "📥 Deep Data Analysis":
+    # Your existing analysis code...
+    pass
